@@ -30,10 +30,16 @@ class GameViewController: NSViewController {
     
     override func viewDidAppear() {
         super.viewDidAppear()
-        
-        // Устанавливаем размер окна
-        let scale = MAC_WINDOW_SCALE
-        view.window?.setContentSize(CGSize(width: GAME_WIDTH * scale, height: GAME_HEIGHT * scale))
+
+        // Автоматический размер окна под экран
+        if let screen = view.window?.screen ?? NSScreen.main {
+            let maxH = screen.visibleFrame.height - 40
+            let maxW = screen.visibleFrame.width - 40
+            let scaleH = maxH / GAME_HEIGHT
+            let scaleW = maxW / GAME_WIDTH
+            let scale = min(scaleH, scaleW, 1.0)
+            view.window?.setContentSize(CGSize(width: GAME_WIDTH * scale, height: GAME_HEIGHT * scale))
+        }
         view.window?.title = "Рыцари и Замки"
     }
 }
